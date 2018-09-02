@@ -1,29 +1,62 @@
 import socket
 import threading
+import sys
+import pickle
 
 
 class Servidor:
 
-    mi_socket = socket.socket()
-    conexiones = []
     
-    def __init__(self):
-        self.mi_socket.bind(('0.0.0.0', 10000))
-        self.mi_socket.listen(1)
+    def __init__(self, IP = "localhost", puerto = 5000):
+        self.conexiones = []
+        self.mi_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.mi_socket.bind((IP, puerto))
+        self.mi_socket.listen(10)
+        self.mi_socket.setblocking(False)
+        hilo_1 = threading.Thread(target = self.aceptar_conexiones)
+        hilo_2 = threading.Thread(target = self.manejo)
+        hilo_1.daemon = True
+        hilo_1.start()
+        hilo_2.daemon = True
+        hilo_2.start()
+        try:
+            while True:
+                mensaje = input("")
+                if mensaje == "salir":
+                    break
+            self.mi_socket.close()
+            sys.exit()
+        except:
+            pass
 
-    def manejo(self, conexion, direccion):
+    def mensajes(self, mensaje, cliente):
+        for c in self.conexiones:
+            try:
+                if c != cliente:
+                    c.send(mensaje)
+            except:
+                self.conexiones.remove(c)
+
+
+    def aceptar_conexiones(self):
         while True:
-            peticion = conexion.recv(1024)
-            for conexion in self.conexiones:
-                conexion.send(bytes(peticion))
-            if peticion == None:
-                break
+            try:
+                conection, addr = self.mi_socket.accept()
+                conection.setblocking(False)
+                self.conexiones.append(conection)
+            except:
+                pass
+            
+    def manejo(self):
+        while True:
+            if len(self.conexiones) > 0:
+                for clt in self.conexiones:
+                    try:
+                        datos = clt.recv(1024)
+                        if datos:
+                            self.mensajes(datos, clt)
+                    except:
+                        pass
 
-    def ejecutar(self):
-        conexion, direccion = self.mi_socket.accept()
-        hilo = threading.Thread(target = manejo, args = (conexion,direccion))
-        hilo.setDaemon(True)
-        hilo.start()
-        self.conexiones.append(conexion)
-        print(slef.conexiones)
-
+servidor = Servidor()
+87

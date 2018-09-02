@@ -11,7 +11,7 @@ class TestCliente(unittest.TestCase):
         self.assertTrue(cliente)
     
     def TestEnviarMensaje(self):
-        self.assertEqual(Cliente.enviarMensaje(), "")
+        self.assertIsInstance(Cliente.enviarMensaje(), str)
 
 
 if __name__ == '__main__':

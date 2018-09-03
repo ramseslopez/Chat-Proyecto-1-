@@ -21,6 +21,7 @@ class Servidor:
         hilo_2.start()
         try:
             while True:
+                print("Esperando conexión ...")
                 mensaje = input("")
                 if mensaje == "salir":
                     break
@@ -41,9 +42,10 @@ class Servidor:
     def aceptar_conexiones(self):
         while True:
             try:
-                conection, addr = self.mi_socket.accept()
-                conection.setblocking(False)
-                self.conexiones.append(conection)
+                connection, addr = self.mi_socket.accept()
+                connection.setblocking(False)
+                self.conexiones.append(connection)
+                print(str(addr[0])+ ": " + str(addr[1]) + " connected")
             except:
                 pass
             
@@ -55,8 +57,9 @@ class Servidor:
                         datos = clt.recv(1024)
                         if datos:
                             self.mensajes(datos, clt)
+                        print(str(clt) + "is desconnected")
                     except:
                         pass
+        
 
 servidor = Servidor()
-87

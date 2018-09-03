@@ -57,7 +57,6 @@ class Servidor:
                         datos = clt.recv(1024)
                         if datos:
                             self.mensajes(datos, clt)
-                        print(str(clt) + "is desconnected")
                     except:
                         pass
         

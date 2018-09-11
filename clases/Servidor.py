@@ -18,8 +18,10 @@ class Servidor:
 
         
     def asignar_hilos(self):
-        """Se encarga de a los hilos de ejecucion las tareas del manejo y
-        envío de los mensajes"""
+        """
+        Se encarga de a los hilos de ejecucion las tareas del manejo y
+        envio de los mensajes
+        """
         hilo_1 = threading.Thread(target = self.aceptar_conexiones)
         hilo_2 = threading.Thread(target = self.manejo)
         hilo_1.setDaemon(True)
@@ -29,11 +31,13 @@ class Servidor:
 
 
     def establecer_conexion(self):
-        """Se encarga de establecer la conexión y esperar a que los clientes se
-        conecten para interactuar entre ellos"""
+        """
+        Se encarga de establecer la conexion y esperar a que los clientes se
+        conecten para interactuar entre ellos
+        """
         try:
             while True:
-                print("Esperando conexión ...")
+                print("Esperando conexion ...")
                 mensaje = input("")
                 if mensaje == "salir":
                     break
@@ -44,7 +48,9 @@ class Servidor:
 
 
     def mensajes(self, mensaje, cliente):
-        """Se encarga de enviar los mensajes a todos los clientes"""
+        """
+        Se encarga de enviar los mensajes a todos los clientes
+        """
         for c in self.conexiones:
             try:
                 if c != cliente:
@@ -54,7 +60,9 @@ class Servidor:
 
 
     def aceptar_conexiones(self):
-        """Se encarga de aceptar la conexión de los clientes y mostar la conexión"""
+        """
+        Se encarga de aceptar la conexión de los clientes y mostar la conexión
+        """
         while True:
             try:
                 connection, addr = self.mi_socket.accept()
@@ -66,7 +74,9 @@ class Servidor:
                 
             
     def manejo(self):
-        """Se encarga del manejo de los clientes y los mensajes dentro del chat"""
+        """
+        Se encarga del manejo de los clientes y los mensajes dentro del chat
+        """
         while True:
             if len(self.conexiones) > 0:
                 for clt in self.conexiones:

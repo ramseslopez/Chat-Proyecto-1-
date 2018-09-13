@@ -1,17 +1,13 @@
 import unittest
 import Cliente
+import socket
 
 class TestCliente(unittest.TestCase):
 
-    def setUp(self):
-        self.cliente = Cliente.Cliente()
-
-    def TestInit(self):
-        cliente = Cliente.Cliente()
-        self.assertTrue(cliente)
     
     def TestEnviarMensaje(self):
-        self.assertIsInstance(Cliente.enviarMensaje(), str)
+        self.c = Cliente.Cliente("localhost",5000)
+        self.assertIsInstance(self.c.enviar_mensaje(), str)
 
 
 if __name__ == '__main__':

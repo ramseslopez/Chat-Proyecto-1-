@@ -1,21 +1,18 @@
 import unittest
 import Servidor
+import socket
 
 class TestServidor(unittest.TestCase):
 
-    def setUp(self):
+    def TestGetSocket(self):
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.servidor = Servidor.Servidor()
+        self.assertEqual(self.servidor,self.socket.getSocket())
+        self.socket.close()
 
-    def TestInit(self):
-        servidor = Servidor.Servidor() 
-        self.assertTrue(servidor)
+    def TestGetConexiones(self):
+        #servidor = Servidor.Servidor()
+        self.assertEquals(20, Servidor.getConexiones())
         
-    def TestManejo(self):
-        self.assertIsNotNone(Servidor.manejo())
-
-    def TestEjecutar(self):
-        self.assertTrue(Servidor.ejecutar())
-
-
-if __name__ == '__main__':
+if __name__=='__main__':
     unittest.main()

@@ -6,11 +6,12 @@ import pickle
 class Cliente:
 
 
-    def __init__(self, IP = "localhost", puerto = 5000):
+    def __init__(self, IP="localhost", puerto=5000):
         self.mi_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.mi_socket.connect( (IP, puerto) )
         self.asignar_hilo()
         self.escribir_mensaje()
+        
 
 
     def asignar_hilo(self):
@@ -24,10 +25,10 @@ class Cliente:
 
     def escribir_mensaje(self):
         """
-        Se encarga de escribir y enviar el mensaje a los demas clientes
+        Se encarga de enviar el mensaje a todos los clientes conectados
         """
         while True:
-            entrada = input("")
+            entrada = input(" ")
             if entrada != "salir":
                 self.enviar_mensaje(entrada)
             else:
@@ -37,7 +38,7 @@ class Cliente:
 
     def recibir_mensaje(self):
         """
-        Se encarga de recibir y aceptar los mensajes de otros clientes
+        Se encarga de aceptar los mensajes de otros clientes
         """
         while True:
             try:
@@ -50,12 +51,11 @@ class Cliente:
 
     def enviar_mensaje(self, mensaje):
         """
-        Se encarga de enviar los mensajes
+        Se encarga de enviar los mensajes a un usuario en específico
         """
         try:
             self.mi_socket.send(pickle.dumps(mensaje))
         except:
             print("Ocurrió un error al enviar el mensaje")
 
-
-cliente = Cliente()
+#cliente = Cliente()

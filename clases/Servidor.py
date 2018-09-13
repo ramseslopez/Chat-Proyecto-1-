@@ -16,7 +16,13 @@ class Servidor:
         self.asignar_hilos()
         self.establecer_conexion()
 
-        
+    def get_socket(self):
+        return self.mi_socket
+
+    def get_conexiones(self):
+        return self.conexiones
+
+       
     def asignar_hilos(self):
         """
         Se encarga de a los hilos de ejecucion las tareas del manejo y
@@ -84,8 +90,9 @@ class Servidor:
                         datos = clt.recv(1024)
                         if datos:
                             self.mensajes(datos, clt)
+                        print(datos)
                     except:
                         pass
         
 
-servidor = Servidor()
+#servidor = Servidor()

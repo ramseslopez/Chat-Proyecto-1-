@@ -7,33 +7,58 @@ import pickle
 class Servidor:
 
    
-    def __init__(self, IP = "localhost", puerto = 5000):
+    def __init__(self, IP, puerto):
+        """
+        Metodo que crea un instancia de la clase donde iniciliza un 
+        socket, la direccion del cliente y la lista de conexiones
+        """
         self.conexiones = []
         self.mi_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.mi_socket.bind((IP, puerto))
-        self.mi_socket.listen(500)
-        self.mi_socket.setblocking(False)
-        self.asignar_hilos()
-        self.establecer_conexion()
+        self.direccion = (str(IP), int(puerto))
 
-    def get_socket(self):
+    def obtener_socket(self):
+        """
+        Metodo para obtener el socket definido.
+        """
         return self.mi_socket
 
-    def get_conexiones(self):
-        return self.conexiones
+    def asignar_socket(self, socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)):
+        self.cerrar_socket()
+        self.mi_socket = socket
 
+    def obtener_conexiones(self):
+        """
+        Metodo para obtener el numero de conexiones del chat.
+        """
+        return len(self.conexiones)
+
+    def obtener_direccion(self):
+        """
+        Metodo para obtener la direccion con la cual se ejecutara 
+        el servidor.
+        """
+        return self.direccion
+
+    def asignar_direccion(self, IP, puerto):
+        """
+        Método para asignar al servidor una direccion con la cual se va a 
+        ejecutar el servidor.
+        """
+        self.IP = str(IP)
+        self.puerto = int(puerto)
+        self.direccion = (self.IP, self.puerto)
        
-    def asignar_hilos(self):
+    def manejar_conexiones(self):
         """
-        Se encarga de a los hilos de ejecucion las tareas del manejo y
-        envio de los mensajes
+        Metodo que se encarga de asignar a hilos de ejecucion las tareas del
+        manejo y envio de los mensajes.
         """
-        hilo_1 = threading.Thread(target = self.aceptar_conexiones)
-        hilo_2 = threading.Thread(target = self.manejo)
-        hilo_1.setDaemon(True)
-        hilo_1.start()
-        hilo_2.setDaemon(True)
-        hilo_2.start()
+        aceptar_conn = threading.Thread(target = self.aceptar_conexiones)
+        manejo = threading.Thread(target = self.manejo)
+        aceptar_conn.setDaemon(True)
+        aceptar_conn.start()
+        manejo.setDaemon(True)
+        manejo.start()
 
 
     def establecer_conexion(self):
@@ -47,7 +72,7 @@ class Servidor:
                 mensaje = input("")
                 if mensaje == "salir":
                     break
-            self.mi_socket.close()
+            self.cerrar_socket()
             sys.exit()
         except:
             pass
@@ -55,19 +80,20 @@ class Servidor:
 
     def mensajes(self, mensaje, cliente):
         """
-        Se encarga de enviar los mensajes a todos los clientes
+        Metodo que se encarga de enviar los mensajes a todos los clientes
+        conectados.
         """
-        for c in self.conexiones:
+        for conexion in self.conexiones:
             try:
-                if c != cliente:
-                    c.send(mensaje)
+                if conexion != cliente:
+                    conexion.send(mensaje)
             except:
-                self.conexiones.remove(c)
+                self.conexiones.remove(conexion)
 
 
     def aceptar_conexiones(self):
         """
-        Se encarga de aceptar la conexión de los clientes y mostar la conexión
+        Metodo que se encarga de aceptar la conexión de los clientes.
         """
         while True:
             try:
@@ -81,18 +107,29 @@ class Servidor:
             
     def manejo(self):
         """
-        Se encarga del manejo de los clientes y los mensajes dentro del chat
+        Metodo que se encarga del manejo de los clientes y los mensajes 
+        dentro del chat.
         """
         while True:
-            if len(self.conexiones) > 0:
+            if self.obtener_conexiones() > 0:
                 for clt in self.conexiones:
                     try:
                         datos = clt.recv(1024)
                         if datos:
                             self.mensajes(datos, clt)
-                        print(datos)
                     except:
                         pass
+
+    def ejecutar_servidor(self):
+        """
+        Metodo que se encarga de ejecutar al servidor.
+        """
+        self.mi_socket.bind(self.direccion)
+        self.mi_socket.listen(500)
+        self.mi_socket.setblocking(False)
+        self.manejar_conexiones()
+        self.establecer_conexion()
         
 
-#servidor = Servidor()
+#servidor = Servidor(str(sys.argv[1]),int(sys.argv[2]))
+#servidor.ejecutar_servidor()

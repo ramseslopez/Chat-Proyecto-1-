@@ -5,13 +5,14 @@ import pickle
 
 class Cliente:
 
+    mi_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def __init__(self, IP, puerto): 
         """
         Metodo que crea un instancia de la clase donde iniciliza un socket
         y la direccion del cliente
         """
-        self.mi_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.obtener_socket()
         self.direccion_cliente = (str(IP), int(puerto))
 
 
@@ -23,9 +24,9 @@ class Cliente:
 
     def asignar_socket(self, socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)):
         """
-        Método para asignar al cliente una nuevo socket
+        Metodo para asignar al cliente una nuevo socket
         """
-        self.cerrar_socket()
+        self.mi_socket.close()
         self.mi_socket = socket
 
     def obtener_direccion(self):
@@ -37,7 +38,7 @@ class Cliente:
 
     def asignar_direccion(self, IP, puerto):
         """
-        Método para asignar al cliente una direccion con la cual se va a 
+        Metodo para asignar al cliente una direccion con la cual se va a 
         conectar con el servidor.
         """
         self.IP = str(IP)
@@ -69,7 +70,7 @@ class Cliente:
             if entrada != "salir":
                 self.enviar_mensaje(nombre_cliente, entrada)
             else:
-                self.cerrar_socket()
+                self.mi_socket.close()
                 sys.exit()
                 
 
@@ -89,12 +90,12 @@ class Cliente:
 
     def enviar_mensaje(self, nombre_cliente, mensaje):
         """
-        Se encarga de enviar los mensajes a un usuario en específico
+        Se encarga de enviar los mensajes a un usuario en especifico
         """
         try:
             self.mi_socket.send(pickle.dumps("["+ nombre_cliente +"]: " + mensaje))
         except:
-            print("Ocurrió un error al enviar el mensaje")
+            print("Ocurrio un error al enviar el mensaje")
 
     def ejecutar_cliente(self):
         """
@@ -105,6 +106,10 @@ class Cliente:
         self.enviar_mensajes()
 
     def asignar_estado(self):
+        """
+        Metodo que se encarga de asignarle un estado al cliente mientras
+        esta conectado
+        """
         print("Elige un estado: ")
         print("1. ACTIVE")
         print("2. AWAY")
@@ -117,6 +122,8 @@ class Cliente:
         }
         self.estado = switcher.get(opcion, "Opcion invalida")
         return self.estado
+
+
 
 
 #a=sys.argv[1]

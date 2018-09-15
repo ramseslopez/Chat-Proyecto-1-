@@ -6,14 +6,16 @@ import pickle
 
 class Servidor:
 
-   
+    mi_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    conexiones = []
+
     def __init__(self, IP, puerto):
         """
         Metodo que crea un instancia de la clase donde iniciliza un 
         socket, la direccion del cliente y la lista de conexiones
         """
-        self.conexiones = []
-        self.mi_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.obtener_conexiones()
+        self.obtener_socket()
         self.direccion = (str(IP), int(puerto))
 
     def obtener_socket(self):
@@ -23,14 +25,23 @@ class Servidor:
         return self.mi_socket
 
     def asignar_socket(self, socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)):
-        self.cerrar_socket()
+        """
+        Metodo para asignar al cliente una nuevo socket
+        """
+        self.mi_socket.close()
         self.mi_socket = socket
 
-    def obtener_conexiones(self):
+    def obtener_num_conexiones(self):
         """
         Metodo para obtener el numero de conexiones del chat.
         """
         return len(self.conexiones)
+
+    def obtener_conexiones(self):
+        """
+        Metodo para obtener las conexiones
+        """
+        return self.conexiones
 
     def obtener_direccion(self):
         """
@@ -41,7 +52,7 @@ class Servidor:
 
     def asignar_direccion(self, IP, puerto):
         """
-        Método para asignar al servidor una direccion con la cual se va a 
+        Metodo para asignar al servidor una direccion con la cual se va a 
         ejecutar el servidor.
         """
         self.IP = str(IP)
@@ -72,7 +83,7 @@ class Servidor:
                 mensaje = input("")
                 if mensaje == "salir":
                     break
-            self.cerrar_socket()
+            self.mi_socket.close()
             sys.exit()
         except:
             pass
@@ -89,11 +100,12 @@ class Servidor:
                     conexion.send(mensaje)
             except:
                 self.conexiones.remove(conexion)
+                print(cliente)
 
 
     def aceptar_conexiones(self):
         """
-        Metodo que se encarga de aceptar la conexión de los clientes.
+        Metodo que se encarga de aceptar la conexion de los clientes.
         """
         while True:
             try:
@@ -111,7 +123,7 @@ class Servidor:
         dentro del chat.
         """
         while True:
-            if self.obtener_conexiones() > 0:
+            if self.obtener_num_conexiones() > 0:
                 for clt in self.conexiones:
                     try:
                         datos = clt.recv(1024)

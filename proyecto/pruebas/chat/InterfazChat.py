@@ -1,4 +1,3 @@
-#librería
 from tkinter import *
 
 # declaración de objeto

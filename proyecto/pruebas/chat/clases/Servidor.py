@@ -28,7 +28,6 @@ class Servidor:
         """
         Metodo para asignar al cliente una nuevo socket
         """
-        self.mi_socket.close()
         self.mi_socket = socket
 
     def obtener_num_conexiones(self):
@@ -71,7 +70,6 @@ class Servidor:
         manejo.setDaemon(True)
         manejo.start()
 
-
     def establecer_conexion(self):
         """
         Se encarga de establecer la conexion y esperar a que los clientes se
@@ -83,11 +81,10 @@ class Servidor:
                 mensaje = input("")
                 if mensaje == "salir":
                     break
-            self.mi_socket.close()
+            self.obtener_socket().close()
             sys.exit()
         except:
             pass
-
 
     def mensajes(self, mensaje, cliente):
         """
@@ -102,21 +99,19 @@ class Servidor:
                 self.conexiones.remove(conexion)
                 print(cliente)
 
-
     def aceptar_conexiones(self):
         """
         Metodo que se encarga de aceptar la conexion de los clientes.
         """
         while True:
             try:
-                connection, addr = self.mi_socket.accept()
+                connection, addr = self.obtener_socket().accept()
                 connection.setblocking(False)
-                self.conexiones.append(connection)
+                self.obtener_conexiones().append(connection)
                 print(str(addr[0])+ ": " + str(addr[1]) + " connected")
             except:
                 pass
-                
-            
+                            
     def manejo(self):
         """
         Metodo que se encarga del manejo de los clientes y los mensajes 
@@ -124,7 +119,7 @@ class Servidor:
         """
         while True:
             if self.obtener_num_conexiones() > 0:
-                for clt in self.conexiones:
+                for clt in self.obtener_conexiones():
                     try:
                         datos = clt.recv(1024)
                         if datos:
@@ -136,9 +131,9 @@ class Servidor:
         """
         Metodo que se encarga de ejecutar al servidor.
         """
-        self.mi_socket.bind(self.direccion)
-        self.mi_socket.listen(500)
-        self.mi_socket.setblocking(False)
+        self.obtener_socket().bind(self.direccion)
+        self.obtener_socket().listen(500)
+        self.obtener_socket().setblocking(False)
         self.manejar_conexiones()
         self.establecer_conexion()
         

@@ -47,9 +47,6 @@ class TestServidor(unittest.TestCase):
     def test_EstablecerConexion(self):
         pass
 
-    def test_AceptarConexiones(self):
-        pass
-
     def test_Manejo(self):
         pass
 

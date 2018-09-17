@@ -63,10 +63,7 @@ class Servidor:
         Metodo que se encarga de asignar a hilos de ejecucion las tareas del
         manejo y envio de los mensajes.
         """
-        aceptar_conn = threading.Thread(target = self.aceptar_conexiones)
         manejo = threading.Thread(target = self.manejo)
-        aceptar_conn.setDaemon(True)
-        aceptar_conn.start()
         manejo.setDaemon(True)
         manejo.start()
 
@@ -97,11 +94,12 @@ class Servidor:
                     conexion.send(mensaje)
             except:
                 self.conexiones.remove(conexion)
-                print(cliente)
 
-    def aceptar_conexiones(self):
+                            
+    def manejo(self):
         """
-        Metodo que se encarga de aceptar la conexion de los clientes.
+        Metodo que se encarga del manejo de los clientes y los mensajes 
+        dentro del chat.
         """
         while True:
             try:
@@ -111,19 +109,20 @@ class Servidor:
                 print(str(addr[0])+ ": " + str(addr[1]) + " connected")
             except:
                 pass
-                            
-    def manejo(self):
-        """
-        Metodo que se encarga del manejo de los clientes y los mensajes 
-        dentro del chat.
-        """
-        while True:
-            if self.obtener_num_conexiones() > 0:
+
+            if self.obtener_num_conexiones() >= 1:
                 for clt in self.obtener_conexiones():
                     try:
                         datos = clt.recv(1024)
-                        if datos:
+                        try:
                             self.mensajes(datos, clt)
+                        except:
+                            pass
+                        if not datos:
+                           print(str(addr[0])+ ": " + str(addr[1]) + " disconnected")
+                           self.obtener_conexiones().remove(clt)
+                           clt.close()
+                           break
                     except:
                         pass
 

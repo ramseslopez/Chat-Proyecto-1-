@@ -73,12 +73,14 @@ class Cliente:
         """
         print("Dame tu nombre de usuario: ")
         nombre_cliente = str(input())
+        self.obtener_socket().send(pickle.dumps(nombre_cliente + " connected"))
         print("Escribe tus mensajes")
         while True:
             entrada = str(input())
             if entrada != "salir":
                 self.enviar_mensaje(nombre_cliente, entrada)
             else:
+                self.obtener_socket().send(pickle.dumps(nombre_cliente + " disconnected"))
                 self.obtener_socket().close()
                 sys.exit()
                 
@@ -97,7 +99,7 @@ class Cliente:
 
     def enviar_mensaje(self, nombre_cliente, mensaje):
         """
-        Se encarga de enviar los mensajes a un usuario en especifico
+        Se encarga de enviar los mensajes.
         """
         try:
             self.obtener_socket().send(pickle.dumps("["+ nombre_cliente +"]: " + mensaje))
@@ -108,7 +110,7 @@ class Cliente:
         """
         Metodo que se encarga de conectar al cliente con el servidor
         """
-        self.obtener_socket().connect(self.direccion_cliente)
+        self.obtener_socket().connect(self.obtener_direccion())
         self.manejar_mensajes()
         self.enviar_mensajes()
 

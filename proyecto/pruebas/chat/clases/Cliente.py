@@ -77,7 +77,7 @@ class Cliente:
         print("Escribe tus mensajes")
         while True:
             entrada = str(input())
-            if entrada != "salir":
+            if entrada != "DISCONNECT":
                 self.enviar_mensaje(nombre_cliente, entrada)
             else:
                 self.obtener_socket().send(pickle.dumps(nombre_cliente + " disconnected"))
@@ -113,6 +113,7 @@ class Cliente:
         self.obtener_socket().connect(self.obtener_direccion())
         self.manejar_mensajes()
         self.enviar_mensajes()
+
 
 cliente = Cliente(sys.argv[1],sys.argv[2])
 cliente.ejecutar_cliente()

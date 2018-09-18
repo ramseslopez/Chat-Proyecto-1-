@@ -89,9 +89,7 @@ _Para obtener la documentación, ejecutar el siguiente comando:_
 * Tkinter 8.6
 
 ## Autor ✒️
-
 * **Ramses Antonio López Soto** - [ramseslopez](https://github.com/ramseslopez)
-
 
 ---
 ⌨️ con ❤️ por [ramseslopez](https://github.com/ramseslopez) 😊

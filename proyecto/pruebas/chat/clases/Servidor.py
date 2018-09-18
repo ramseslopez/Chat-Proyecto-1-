@@ -110,7 +110,7 @@ class Servidor:
             except:
                 pass
 
-            if self.obtener_num_conexiones() >= 1:
+            if self.obtener_num_conexiones() > 0:
                 for clt in self.obtener_conexiones():
                     try:
                         datos = clt.recv(1024)
@@ -137,5 +137,5 @@ class Servidor:
         self.establecer_conexion()
         
 
-#servidor = Servidor(str(sys.argv[1]),int(sys.argv[2]))
-#servidor.ejecutar_servidor()
+servidor = Servidor(str(sys.argv[1]),int(sys.argv[2]))
+servidor.ejecutar_servidor()

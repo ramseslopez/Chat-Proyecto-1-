@@ -114,5 +114,5 @@ class Cliente:
         self.manejar_mensajes()
         self.enviar_mensajes()
 
-#cliente = Cliente(sys.argv[1],sys.argv[2])
-#cliente.ejecutar_cliente()
+cliente = Cliente(sys.argv[1],sys.argv[2])
+cliente.ejecutar_cliente()

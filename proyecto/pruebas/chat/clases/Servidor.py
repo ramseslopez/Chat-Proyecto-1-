@@ -76,11 +76,7 @@ class Servidor:
             while True:
                 print("Esperando conexion ...")
                 mensaje = input("")
-<<<<<<< HEAD
-                if mensaje == "salir":
-=======
                 if mensaje == "DISCONNECT":
->>>>>>> work
                     break
             self.obtener_socket().close()
             sys.exit()
@@ -140,6 +136,6 @@ class Servidor:
         self.manejar_conexiones()
         self.establecer_conexion()
         
-
-servidor = Servidor(sys.argv[1],sys.argv[2])
-servidor.ejecutar_servidor()
+if __name__=="__main__":
+	servidor = Servidor(sys.argv[1],sys.argv[2])
+	servidor.ejecutar_servidor()

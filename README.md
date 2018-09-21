@@ -83,6 +83,19 @@ _Para obtener la documentación, ejecutar el siguiente comando:_
 ./doc.sh
 ```
 
+## Ejecución
+__Para ejecutar el servidor utilice el siguiente comando:__
+
+```
+python3 proyecto/pruebas/chat/clases/Servidor.py
+```
+
+__Para ejecutar el cliente utilice el siguiente comando pasando como argumanto una dirección IP:__
+
+```
+python3 proyecto/pruebas/chat/clases/Cliente.py 127.0.0.1
+```
+
 ## Construido con 🛠️
 
 * Python 3.5.2

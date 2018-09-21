@@ -115,5 +115,5 @@ class Cliente:
         self.enviar_mensajes()
 
 if __name__=="__main__":
-	cliente = Cliente(sys.argv[1],sys.argv[2])
+	cliente = Cliente(sys.argv[1], 5000)
 	cliente.ejecutar_cliente()

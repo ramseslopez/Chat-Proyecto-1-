@@ -137,5 +137,5 @@ class Servidor:
         self.establecer_conexion()
         
 if __name__=="__main__":
-	servidor = Servidor(sys.argv[1],sys.argv[2])
+	servidor = Servidor("0.0.0.0",5000)
 	servidor.ejecutar_servidor()
